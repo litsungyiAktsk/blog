@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>C&#43;&#43; 命名規則 | Programmer Cookbook</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.73.0" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/blog/dist/css/app.4fc0b62e4b82c997bb0041217cd6b979.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+
+    
+
+    
+    
+    <meta property="og:title" content="C&#43;&#43; 命名規則" />
+<meta property="og:description" content="General Rule  程式中的所有類別、變數、函式&hellip;的命名請務必使用讓人看到名稱就可以了解他的用途。  使用註解來解釋是不得已的作法，請盡量避免。   名稱的長度沒有限制，但是請以人類容易閱讀、記憶的原則命名，過長或過短的名稱都不適當。  避免無法發音的名稱或是外語的羅馬拼音，除非這是所有成員都理解的專有名稱或是 領域用語。 不要使用自創的縮寫。 使用縮寫請確保團隊成員都清楚縮寫的意義。   命名時請考慮使用共同的 領域用語，降低與其他成員溝通的成本。  團隊應該建立自己的 字彙表 提供團隊成員查詢專案使用的 領域用語。    引用防護（include guard）命名  使用 ALL_CAPS （全大寫命名法）命名。命名規則使用檔案完整路徑並且加上 __ 前綴。（Ex. __BATTLE_FLElD_H）  建議改用 #pragma once 取代引用防護，編譯器能對 #pragma once 做較好的最佳化。    全域變數命名  使用 lower camel case （小駝峰式命名法）命名，並且加上 g_ 前綴。（Ex. bool g_battleField）  請避免使用全域變數。    區域變數命名  使用 lower camel case （小駝峰式命名法）命名。（Ex. bool battleField）  常數命名  使用 ALL_CAPS （全大寫命名法）命名。（Ex." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://litsungyiAktsk.github.io/blog/posts/cpp-naming/" />
+<meta property="article:published_time" content="2020-06-29T14:13:50+08:00" />
+<meta property="article:modified_time" content="2020-06-29T14:13:50+08:00" />
+<meta itemprop="name" content="C&#43;&#43; 命名規則">
+<meta itemprop="description" content="General Rule  程式中的所有類別、變數、函式&hellip;的命名請務必使用讓人看到名稱就可以了解他的用途。  使用註解來解釋是不得已的作法，請盡量避免。   名稱的長度沒有限制，但是請以人類容易閱讀、記憶的原則命名，過長或過短的名稱都不適當。  避免無法發音的名稱或是外語的羅馬拼音，除非這是所有成員都理解的專有名稱或是 領域用語。 不要使用自創的縮寫。 使用縮寫請確保團隊成員都清楚縮寫的意義。   命名時請考慮使用共同的 領域用語，降低與其他成員溝通的成本。  團隊應該建立自己的 字彙表 提供團隊成員查詢專案使用的 領域用語。    引用防護（include guard）命名  使用 ALL_CAPS （全大寫命名法）命名。命名規則使用檔案完整路徑並且加上 __ 前綴。（Ex. __BATTLE_FLElD_H）  建議改用 #pragma once 取代引用防護，編譯器能對 #pragma once 做較好的最佳化。    全域變數命名  使用 lower camel case （小駝峰式命名法）命名，並且加上 g_ 前綴。（Ex. bool g_battleField）  請避免使用全域變數。    區域變數命名  使用 lower camel case （小駝峰式命名法）命名。（Ex. bool battleField）  常數命名  使用 ALL_CAPS （全大寫命名法）命名。（Ex.">
+<meta itemprop="datePublished" content="2020-06-29T14:13:50&#43;08:00" />
+<meta itemprop="dateModified" content="2020-06-29T14:13:50&#43;08:00" />
+<meta itemprop="wordCount" content="192">
+
+
+
+<meta itemprop="keywords" content="c&#43;&#43;," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="C&#43;&#43; 命名規則"/>
+<meta name="twitter:description" content="General Rule  程式中的所有類別、變數、函式&hellip;的命名請務必使用讓人看到名稱就可以了解他的用途。  使用註解來解釋是不得已的作法，請盡量避免。   名稱的長度沒有限制，但是請以人類容易閱讀、記憶的原則命名，過長或過短的名稱都不適當。  避免無法發音的名稱或是外語的羅馬拼音，除非這是所有成員都理解的專有名稱或是 領域用語。 不要使用自創的縮寫。 使用縮寫請確保團隊成員都清楚縮寫的意義。   命名時請考慮使用共同的 領域用語，降低與其他成員溝通的成本。  團隊應該建立自己的 字彙表 提供團隊成員查詢專案使用的 領域用語。    引用防護（include guard）命名  使用 ALL_CAPS （全大寫命名法）命名。命名規則使用檔案完整路徑並且加上 __ 前綴。（Ex. __BATTLE_FLElD_H）  建議改用 #pragma once 取代引用防護，編譯器能對 #pragma once 做較好的最佳化。    全域變數命名  使用 lower camel case （小駝峰式命名法）命名，並且加上 g_ 前綴。（Ex. bool g_battleField）  請避免使用全域變數。    區域變數命名  使用 lower camel case （小駝峰式命名法）命名。（Ex. bool battleField）  常數命名  使用 ALL_CAPS （全大寫命名法）命名。（Ex."/>
+
+	
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="/blog/" class="f3 fw2 hover-white no-underline white-90 dib">
+      
+        Programmer Cookbook
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        POSTS
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://litsungyiAktsk.github.io/blog/posts/cpp-naming/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://litsungyiAktsk.github.io/blog/posts/cpp-naming/&amp;text=C&#43;&#43;%20%e5%91%bd%e5%90%8d%e8%a6%8f%e5%89%87" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://litsungyiAktsk.github.io/blog/posts/cpp-naming/&amp;title=C&#43;&#43;%20%e5%91%bd%e5%90%8d%e8%a6%8f%e5%89%87" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">C&#43;&#43; 命名規則</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2020-06-29T14:13:50&#43;08:00">June 29, 2020</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><h1 id="general-rule">General Rule</h1>
+<ul>
+<li>程式中的所有類別、變數、函式&hellip;的命名請務必使用讓人看到名稱就可以了解他的用途。
+<ul>
+<li>使用註解來解釋是不得已的作法，請盡量避免。</li>
+</ul>
+</li>
+<li>名稱的長度沒有限制，但是請以人類容易閱讀、記憶的原則命名，過長或過短的名稱都不適當。
+<ul>
+<li>避免無法發音的名稱或是外語的羅馬拼音，除非這是所有成員都理解的專有名稱或是 <strong>領域用語</strong>。</li>
+<li>不要使用自創的縮寫。</li>
+<li>使用縮寫請確保團隊成員都清楚縮寫的意義。</li>
+</ul>
+</li>
+<li>命名時請考慮使用共同的 <strong>領域用語</strong>，降低與其他成員溝通的成本。
+<ul>
+<li>團隊應該建立自己的 <strong>字彙表</strong> 提供團隊成員查詢專案使用的 <strong>領域用語</strong>。</li>
+</ul>
+</li>
+</ul>
+<h1 id="引用防護include-guard命名">引用防護（include guard）命名</h1>
+<ul>
+<li>使用 ALL_CAPS （全大寫命名法）命名。命名規則使用檔案完整路徑並且加上 <code>__</code> 前綴。（Ex. <code>__BATTLE_FLElD_H</code>）
+<ul>
+<li>建議改用 <code>#pragma once</code> 取代引用防護，編譯器能對 <code>#pragma once</code> 做較好的最佳化。</li>
+</ul>
+</li>
+</ul>
+<h1 id="全域變數命名">全域變數命名</h1>
+<ul>
+<li>使用 lower camel case （小駝峰式命名法）命名，並且加上 <code>g_</code> 前綴。（Ex. <code>bool g_battleField</code>）
+<ul>
+<li>請避免使用全域變數。</li>
+</ul>
+</li>
+</ul>
+<h1 id="區域變數命名">區域變數命名</h1>
+<ul>
+<li>使用 lower camel case （小駝峰式命名法）命名。（Ex. <code>bool battleField</code>）</li>
+</ul>
+<h1 id="常數命名">常數命名</h1>
+<ul>
+<li>使用 ALL_CAPS （全大寫命名法）命名。（Ex. <code>const bool BATTLE_FLAG</code>）</li>
+</ul>
+<h1 id="命名空間命名">命名空間命名</h1>
+<ul>
+<li>使用 upper camel case （大駝峰式命名法）命名。（Ex. <code>namespace BattleField</code>）</li>
+</ul>
+<h1 id="函式命名">函式命名</h1>
+<ul>
+<li>函式使用 lower camel case （小駝峰式命名法）命名。（Ex. <code>void battleFunction()</code>）</li>
+<li>參數使用 lower camel case （小駝峰式命名法）命名。（Ex. <code>void battleFunction(bool battleFlag)</code>）</li>
+</ul>
+<h1 id="列舉命名">列舉命名</h1>
+<ul>
+<li>使用 upper camel case （大駝峰式命名法）命名。（Ex. <code>enum BattleField</code>）</li>
+</ul>
+<h2 id="列舉值命名">列舉值命名</h2>
+<ul>
+<li>使用 upper camel case （大駝峰式命名法）命名。（Ex. <code>Empty = 0</code>）
+<ul>
+<li>盡量給所有列舉值初始值，避免程式改動後數值錯亂。</li>
+</ul>
+</li>
+<li>命名時請不要重複列舉的名稱。
+<ul>
+<li>GOOD: <code>enum BattleField { Empty = 0, Full = 1, };</code></li>
+<li>BAD: <code>enum BattleField { BattleFieldEmpty, BattleFieldFull, };</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="類別命名">類別命名</h1>
+<ul>
+<li>使用 upper camel case （大駝峰式命名法）命名。（Ex. <code>class BattleField</code>）</li>
+</ul>
+<h2 id="類別成員命名">類別成員命名</h2>
+<ul>
+<li>public 成員使用 lower camel case （小駝峰式命名法）命名 （Ex. <code>bool battleFlag</code>）。
+<ul>
+<li>請只在 struct 中使用 public 成員。</li>
+</ul>
+</li>
+<li>protected 、 private 成員使用 lower camel case （小駝峰式命名法）命名，並且加上 <code>_</code> 前綴。（Ex. <code>bool _battleFlag</code>）。</li>
+</ul>
+<h2 id="類別方法類別靜態方法命名">類別方法/類別靜態方法命名</h2>
+<ul>
+<li>函式使用 lower camel case （小駝峰式命名法）命名 （Ex. <code>void battleFunction()</code>）</li>
+<li>參數使用 lower camel case （小駝峰式命名法）命名 （Ex. <code>void battleFunction(bool battleFlag)</code>）</li>
+</ul>
+<h2 id="類別靜態成員命名">類別靜態成員命名</h2>
+<ul>
+<li>使用 lower camel case （小駝峰式命名法）命名，並且加上 <code>s_</code> 前綴。 （Ex. <code>static bool s_battleFlag</code>）。</li>
+</ul>
+<h2 id="類別成員常數類別靜態成員常數命名-">類別成員常數/類別靜態成員常數命名 (?)</h2>
+<ul>
+<li>使用 ALL_CAPS （全大寫命名法）命名。 （Ex. <code>static const bool BATTLE_FLAG</code>）。</li>
+</ul>
+<ul class="pa0">
+  
+   <li class="list">
+     <a href="/blog/tags/c&#43;&#43;" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">c&#43;&#43;</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://litsungyiAktsk.github.io/blog/" >
+    &copy;  Programmer Cookbook 2020 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/blog/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

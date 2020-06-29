@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Programmer Cookbook</title>
+    <link>https://litsungyiAktsk.github.io/blog/</link>
+    <description>Recent content on Programmer Cookbook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Mon, 29 Jun 2020 14:13:50 +0800</lastBuildDate>
+    
+	<atom:link href="https://litsungyiAktsk.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>C&#43;&#43; 命名規則</title>
+      <link>https://litsungyiAktsk.github.io/blog/posts/cpp-naming/</link>
+      <pubDate>Mon, 29 Jun 2020 14:13:50 +0800</pubDate>
+      
+      <guid>https://litsungyiAktsk.github.io/blog/posts/cpp-naming/</guid>
+      <description>General Rule  程式中的所有類別、變數、函式&amp;hellip;的命名請務必使用讓人看到名稱就可以了解他的用途。  使用註解來解釋是不得已的作法，請盡量避免。   名稱的長度沒有限制，但是請以人類容易閱讀、記憶的原則命名，過長或過短的名稱都不適當。  避免無法發音的名稱或是外語的羅馬拼音，除非這是所有成員都理解的專有名稱或是 領域用語。 不要使用自創的縮寫。 使用縮寫請確保團隊成員都清楚縮寫的意義。   命名時請考慮使用共同的 領域用語，降低與其他成員溝通的成本。  團隊應該建立自己的 字彙表 提供團隊成員查詢專案使用的 領域用語。    引用防護（include guard）命名  使用 ALL_CAPS （全大寫命名法）命名。命名規則使用檔案完整路徑並且加上 __ 前綴。（Ex. __BATTLE_FLElD_H）  建議改用 #pragma once 取代引用防護，編譯器能對 #pragma once 做較好的最佳化。    全域變數命名  使用 lower camel case （小駝峰式命名法）命名，並且加上 g_ 前綴。（Ex. bool g_battleField）  請避免使用全域變數。    區域變數命名  使用 lower camel case （小駝峰式命名法）命名。（Ex. bool battleField）  常數命名  使用 ALL_CAPS （全大寫命名法）命名。（Ex.</description>
+    </item>
+    
+  </channel>
+</rss>
