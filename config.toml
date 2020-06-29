@@ -1,0 +1,4 @@
+baseURL = "https://litsungyiAktsk.github.io/blog/"
+languageCode = "zh-tw"
+title = "Programmer Cookbook"
+theme = "ananke"
