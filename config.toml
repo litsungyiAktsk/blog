@@ -1,4 +1,4 @@
-baseURL = "https://litsungyiaktsk.github.io/blog/index.html"
+baseURL = "https://litsungyiaktsk.github.io/blog/"
 languageCode = "zh-tw"
 title = "Programmer Cookbook"
 theme = "ananke"
