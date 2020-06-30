@@ -88,7 +88,7 @@ tags: ["c++"]
 - 使用 lower camel case （小駝峰式命名法）命名，並且加上 `s_` 前綴。 （Ex. `static bool s_battleFlag`）。
 
 
-## 類別成員常數/類別靜態成員常數命名 (?)
+## 類別成員常數/類別靜態成員常數命名
 
 - 使用 ALL_CAPS （全大寫命名法）命名。 （Ex. `static const bool BATTLE_FLAG`）。
 
