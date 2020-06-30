@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>C&#43;&#43; - 宣告 vs. 定義 | Programmer Cookbook</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.73.0" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/blog/dist/css/app.4fc0b62e4b82c997bb0041217cd6b979.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+
+    
+
+    
+    
+    <meta property="og:title" content="C&#43;&#43; - 宣告 vs. 定義" />
+<meta property="og:description" content="Declare 宣告  宣告是指程式中使用到某個類別或是變數之前，先讓編譯器知道該類別的名稱或是變數的類別與名稱。 必須要在實際使用之前宣告。因此在標頭檔以及原始檔之中需要使用 #include 這個預處理器命令將用到的類別介紹給編譯器。  #include 這個預處理器命令實際上是將引入的檔案內容取代掉 #include 所在的位置，因此大量的 #include 會大幅增加編譯的時間。 如果只用到指標或是參考時，在標頭檔可以使用前置宣告 (Forward Declare) 的技巧來優化。（細節在 前置宣告 小節中說明）  不呼叫該指標的方法或是使用它的成員時，編譯器不需要知道該類別的形狀，只需要當成該類型的指標變數來處理。因為指標的大小是固定的，所以不需要引入該類別也可以通過編譯。     相同的宣告可以在專案中重複出現。  Define 定義  定義是編譯器提供類型實作細節的地方，以及配置變數記憶體的語句。  因為定義變數時需要配置記憶體在 stack 上，因此編譯器在此時必須要知道此類別的記憶體佈局（成員的順序與類型、記憶體對齊方式等&hellip;）。   與宣告不同的是，定義在程式中只能出現一次。重複定義會造成錯誤。  同一個轉換單元（Translation Unit）之中只能定義一次，否則會有編譯錯誤。 同專案中不同轉換單元之中也只能定義一次，否則會有連結錯誤。   所有程式中有用到的實體（變數、函式&hellip;）都必須也只能在其中一個轉換單元中定義，否則會有連結錯誤。  extern 關鍵字  在多個轉換單元之間，如果要使用同一個變數的實例可以將變數宣告為外部引用（extern），讓編譯器在連結期再把實際的變數實例連結到使用的程式碼。  Forward Declare 前置宣告  需要使用前置宣告通常有兩種原因  因為編譯器必須先看到類別、函式的宣告才能在接下來的程式中使用，一但出現互相引用的狀況編譯器就無法處理。例如底下兩個程式碼就無法編譯：    void TestFunction() { TestClass test; // error: unknown type name &#39;TestClass&#39; } class TestClass { public: void Test() { TestFunction(); } }; class TestClass { public: void Test() { TestFunction(); // error: use of undeclared identifier &#39;TestFunction&#39;  } }; void TestFunction() { TestClass test; }  不論是先定義 TestFunction 還是先定義 TestClass，都會在使用到對方的程式碼的時候發生編譯錯誤。 前置宣告的作法就是把其中一個的定義語法改成宣告語法，先讓編譯器知道名稱、型別資訊來避免編譯錯誤。  void TestFunction(); // NOTE: Forward declare  class TestClass { public: void Test() { TestFunction(); } }; void TestFunction() { TestClass test; } 更常見的原因是為了提升編譯速度。當某個類別的方法參數、成員變數需要其他型別時，我們就需要在標頭檔之中引用其他標頭檔。因為 #include 是將引用的檔案展開到 #include 的位置，當引入的數量很多的時候會有大量的 IO 發生。通常標頭檔還會被其他檔案引用，造成倍數的成長。  如果是方法的參數或是成員變數用到指標或是參考時，編譯器要知道保留多少空間來儲存這個參數。幸運的是指標或是參考的大小都是固定的，因此編譯器並不需要知道整個類別的記憶體佈局。所以使用前置宣告可以減少需要引入的標頭檔數量。 減少需要引入的標頭檔數量還可以減少因為修改檔案時需要重新編譯的檔案數量。    前置宣告的缺點  根據 Google C&#43;&#43; Style Guide 並不建議使用前置宣告。 使用前置宣告可能造成對 incomplete type 的操作，這在 C&#43;&#43; 標準是未定義行為(Undefine Behaviour)，因此無法保證程式是否能更正確運行。  在 #include 該型別的定義之前絕對不要對該型別做操作。  大部分的情況部會有問題，而且誤用時也會有編譯錯誤。但是像是 delete 指標、將指標當成參數是可以通過編譯的（會有警告）。      Ref: https://docs." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://litsungyiaktsk.github.io/blog/posts/cpp-declare-define/" />
+<meta property="article:published_time" content="2020-06-29T17:23:06+08:00" />
+<meta property="article:modified_time" content="2020-06-29T17:23:06+08:00" />
+<meta itemprop="name" content="C&#43;&#43; - 宣告 vs. 定義">
+<meta itemprop="description" content="Declare 宣告  宣告是指程式中使用到某個類別或是變數之前，先讓編譯器知道該類別的名稱或是變數的類別與名稱。 必須要在實際使用之前宣告。因此在標頭檔以及原始檔之中需要使用 #include 這個預處理器命令將用到的類別介紹給編譯器。  #include 這個預處理器命令實際上是將引入的檔案內容取代掉 #include 所在的位置，因此大量的 #include 會大幅增加編譯的時間。 如果只用到指標或是參考時，在標頭檔可以使用前置宣告 (Forward Declare) 的技巧來優化。（細節在 前置宣告 小節中說明）  不呼叫該指標的方法或是使用它的成員時，編譯器不需要知道該類別的形狀，只需要當成該類型的指標變數來處理。因為指標的大小是固定的，所以不需要引入該類別也可以通過編譯。     相同的宣告可以在專案中重複出現。  Define 定義  定義是編譯器提供類型實作細節的地方，以及配置變數記憶體的語句。  因為定義變數時需要配置記憶體在 stack 上，因此編譯器在此時必須要知道此類別的記憶體佈局（成員的順序與類型、記憶體對齊方式等&hellip;）。   與宣告不同的是，定義在程式中只能出現一次。重複定義會造成錯誤。  同一個轉換單元（Translation Unit）之中只能定義一次，否則會有編譯錯誤。 同專案中不同轉換單元之中也只能定義一次，否則會有連結錯誤。   所有程式中有用到的實體（變數、函式&hellip;）都必須也只能在其中一個轉換單元中定義，否則會有連結錯誤。  extern 關鍵字  在多個轉換單元之間，如果要使用同一個變數的實例可以將變數宣告為外部引用（extern），讓編譯器在連結期再把實際的變數實例連結到使用的程式碼。  Forward Declare 前置宣告  需要使用前置宣告通常有兩種原因  因為編譯器必須先看到類別、函式的宣告才能在接下來的程式中使用，一但出現互相引用的狀況編譯器就無法處理。例如底下兩個程式碼就無法編譯：    void TestFunction() { TestClass test; // error: unknown type name &#39;TestClass&#39; } class TestClass { public: void Test() { TestFunction(); } }; class TestClass { public: void Test() { TestFunction(); // error: use of undeclared identifier &#39;TestFunction&#39;  } }; void TestFunction() { TestClass test; }  不論是先定義 TestFunction 還是先定義 TestClass，都會在使用到對方的程式碼的時候發生編譯錯誤。 前置宣告的作法就是把其中一個的定義語法改成宣告語法，先讓編譯器知道名稱、型別資訊來避免編譯錯誤。  void TestFunction(); // NOTE: Forward declare  class TestClass { public: void Test() { TestFunction(); } }; void TestFunction() { TestClass test; } 更常見的原因是為了提升編譯速度。當某個類別的方法參數、成員變數需要其他型別時，我們就需要在標頭檔之中引用其他標頭檔。因為 #include 是將引用的檔案展開到 #include 的位置，當引入的數量很多的時候會有大量的 IO 發生。通常標頭檔還會被其他檔案引用，造成倍數的成長。  如果是方法的參數或是成員變數用到指標或是參考時，編譯器要知道保留多少空間來儲存這個參數。幸運的是指標或是參考的大小都是固定的，因此編譯器並不需要知道整個類別的記憶體佈局。所以使用前置宣告可以減少需要引入的標頭檔數量。 減少需要引入的標頭檔數量還可以減少因為修改檔案時需要重新編譯的檔案數量。    前置宣告的缺點  根據 Google C&#43;&#43; Style Guide 並不建議使用前置宣告。 使用前置宣告可能造成對 incomplete type 的操作，這在 C&#43;&#43; 標準是未定義行為(Undefine Behaviour)，因此無法保證程式是否能更正確運行。  在 #include 該型別的定義之前絕對不要對該型別做操作。  大部分的情況部會有問題，而且誤用時也會有編譯錯誤。但是像是 delete 指標、將指標當成參數是可以通過編譯的（會有警告）。      Ref: https://docs.">
+<meta itemprop="datePublished" content="2020-06-29T17:23:06&#43;08:00" />
+<meta itemprop="dateModified" content="2020-06-29T17:23:06&#43;08:00" />
+<meta itemprop="wordCount" content="142">
+
+
+
+<meta itemprop="keywords" content="c&#43;&#43;," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="C&#43;&#43; - 宣告 vs. 定義"/>
+<meta name="twitter:description" content="Declare 宣告  宣告是指程式中使用到某個類別或是變數之前，先讓編譯器知道該類別的名稱或是變數的類別與名稱。 必須要在實際使用之前宣告。因此在標頭檔以及原始檔之中需要使用 #include 這個預處理器命令將用到的類別介紹給編譯器。  #include 這個預處理器命令實際上是將引入的檔案內容取代掉 #include 所在的位置，因此大量的 #include 會大幅增加編譯的時間。 如果只用到指標或是參考時，在標頭檔可以使用前置宣告 (Forward Declare) 的技巧來優化。（細節在 前置宣告 小節中說明）  不呼叫該指標的方法或是使用它的成員時，編譯器不需要知道該類別的形狀，只需要當成該類型的指標變數來處理。因為指標的大小是固定的，所以不需要引入該類別也可以通過編譯。     相同的宣告可以在專案中重複出現。  Define 定義  定義是編譯器提供類型實作細節的地方，以及配置變數記憶體的語句。  因為定義變數時需要配置記憶體在 stack 上，因此編譯器在此時必須要知道此類別的記憶體佈局（成員的順序與類型、記憶體對齊方式等&hellip;）。   與宣告不同的是，定義在程式中只能出現一次。重複定義會造成錯誤。  同一個轉換單元（Translation Unit）之中只能定義一次，否則會有編譯錯誤。 同專案中不同轉換單元之中也只能定義一次，否則會有連結錯誤。   所有程式中有用到的實體（變數、函式&hellip;）都必須也只能在其中一個轉換單元中定義，否則會有連結錯誤。  extern 關鍵字  在多個轉換單元之間，如果要使用同一個變數的實例可以將變數宣告為外部引用（extern），讓編譯器在連結期再把實際的變數實例連結到使用的程式碼。  Forward Declare 前置宣告  需要使用前置宣告通常有兩種原因  因為編譯器必須先看到類別、函式的宣告才能在接下來的程式中使用，一但出現互相引用的狀況編譯器就無法處理。例如底下兩個程式碼就無法編譯：    void TestFunction() { TestClass test; // error: unknown type name &#39;TestClass&#39; } class TestClass { public: void Test() { TestFunction(); } }; class TestClass { public: void Test() { TestFunction(); // error: use of undeclared identifier &#39;TestFunction&#39;  } }; void TestFunction() { TestClass test; }  不論是先定義 TestFunction 還是先定義 TestClass，都會在使用到對方的程式碼的時候發生編譯錯誤。 前置宣告的作法就是把其中一個的定義語法改成宣告語法，先讓編譯器知道名稱、型別資訊來避免編譯錯誤。  void TestFunction(); // NOTE: Forward declare  class TestClass { public: void Test() { TestFunction(); } }; void TestFunction() { TestClass test; } 更常見的原因是為了提升編譯速度。當某個類別的方法參數、成員變數需要其他型別時，我們就需要在標頭檔之中引用其他標頭檔。因為 #include 是將引用的檔案展開到 #include 的位置，當引入的數量很多的時候會有大量的 IO 發生。通常標頭檔還會被其他檔案引用，造成倍數的成長。  如果是方法的參數或是成員變數用到指標或是參考時，編譯器要知道保留多少空間來儲存這個參數。幸運的是指標或是參考的大小都是固定的，因此編譯器並不需要知道整個類別的記憶體佈局。所以使用前置宣告可以減少需要引入的標頭檔數量。 減少需要引入的標頭檔數量還可以減少因為修改檔案時需要重新編譯的檔案數量。    前置宣告的缺點  根據 Google C&#43;&#43; Style Guide 並不建議使用前置宣告。 使用前置宣告可能造成對 incomplete type 的操作，這在 C&#43;&#43; 標準是未定義行為(Undefine Behaviour)，因此無法保證程式是否能更正確運行。  在 #include 該型別的定義之前絕對不要對該型別做操作。  大部分的情況部會有問題，而且誤用時也會有編譯錯誤。但是像是 delete 指標、將指標當成參數是可以通過編譯的（會有警告）。      Ref: https://docs."/>
+
+	
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="/blog/" class="f3 fw2 hover-white no-underline white-90 dib">
+      
+        Programmer Cookbook
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        POSTS
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://litsungyiaktsk.github.io/blog/posts/cpp-declare-define/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://litsungyiaktsk.github.io/blog/posts/cpp-declare-define/&amp;text=C&#43;&#43;%20-%20%e5%ae%a3%e5%91%8a%20vs.%20%e5%ae%9a%e7%be%a9" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://litsungyiaktsk.github.io/blog/posts/cpp-declare-define/&amp;title=C&#43;&#43;%20-%20%e5%ae%a3%e5%91%8a%20vs.%20%e5%ae%9a%e7%be%a9" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">C&#43;&#43; - 宣告 vs. 定義</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2020-06-29T17:23:06&#43;08:00">June 29, 2020</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><h1 id="declare-宣告">Declare 宣告</h1>
+<ul>
+<li>宣告是指程式中使用到某個類別或是變數之前，先讓編譯器知道該類別的名稱或是變數的類別與名稱。</li>
+<li>必須要在實際使用之前宣告。因此在標頭檔以及原始檔之中需要使用 <code>#include</code> 這個預處理器命令將用到的類別介紹給編譯器。
+<ul>
+<li><code>#include</code> 這個預處理器命令實際上是將引入的檔案內容取代掉 <code>#include</code> 所在的位置，因此大量的 <code>#include</code> 會大幅增加編譯的時間。</li>
+<li>如果只用到指標或是參考時，在標頭檔可以使用前置宣告 (Forward Declare) 的技巧來優化。（細節在 <strong>前置宣告</strong> 小節中說明）
+<ul>
+<li>不呼叫該指標的方法或是使用它的成員時，編譯器不需要知道該類別的形狀，只需要當成該類型的指標變數來處理。因為指標的大小是固定的，所以不需要引入該類別也可以通過編譯。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>相同的宣告可以在專案中重複出現。</li>
+</ul>
+<h1 id="define-定義">Define 定義</h1>
+<ul>
+<li>定義是編譯器提供類型實作細節的地方，以及配置變數記憶體的語句。
+<ul>
+<li>因為定義變數時需要配置記憶體在 stack 上，因此編譯器在此時必須要知道此類別的記憶體佈局（成員的順序與類型、記憶體對齊方式等&hellip;）。</li>
+</ul>
+</li>
+<li>與宣告不同的是，定義在程式中只能出現一次。重複定義會造成錯誤。
+<ul>
+<li>同一個轉換單元（Translation Unit）之中只能定義一次，否則會有編譯錯誤。</li>
+<li>同專案中不同轉換單元之中也只能定義一次，否則會有連結錯誤。</li>
+</ul>
+</li>
+<li>所有程式中有用到的實體（變數、函式&hellip;）都必須也只能在其中一個轉換單元中定義，否則會有連結錯誤。</li>
+</ul>
+<h2 id="extern-關鍵字"><code>extern</code> 關鍵字</h2>
+<ul>
+<li>在多個轉換單元之間，如果要使用同一個變數的實例可以將變數宣告為外部引用（extern），讓編譯器在連結期再把實際的變數實例連結到使用的程式碼。</li>
+</ul>
+<h1 id="forward-declare-前置宣告">Forward Declare 前置宣告</h1>
+<ul>
+<li>需要使用前置宣告通常有兩種原因
+<ol>
+<li>因為編譯器必須先看到類別、函式的宣告才能在接下來的程式中使用，一但出現互相引用的狀況編譯器就無法處理。例如底下兩個程式碼就無法編譯：</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">TestFunction</span>()
+{
+    TestClass test; <span style="color:#75715e">// error: unknown type name &#39;TestClass&#39;
+</span><span style="color:#75715e"></span>}
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestClass</span>
+{
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">void</span> Test()
+    {
+        TestFunction();
+    }
+};
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestClass</span>
+{
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">void</span> Test()
+    {
+        TestFunction(); <span style="color:#75715e">// error: use of undeclared identifier &#39;TestFunction&#39;
+</span><span style="color:#75715e"></span>    }
+};
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">TestFunction</span>()
+{
+    TestClass test;
+}
+</code></pre></div><ul>
+<li>不論是先定義 TestFunction 還是先定義 TestClass，都會在使用到對方的程式碼的時候發生編譯錯誤。</li>
+<li>前置宣告的作法就是把其中一個的定義語法改成宣告語法，先讓編譯器知道名稱、型別資訊來避免編譯錯誤。</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">TestFunction</span>(); <span style="color:#75715e">// NOTE: Forward declare
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestClass</span>
+{
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">void</span> Test()
+    {
+        TestFunction();
+    }
+};
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">TestFunction</span>()
+{
+    TestClass test;
+}
+</code></pre></div><ol start="2">
+<li>更常見的原因是為了提升編譯速度。當某個類別的方法參數、成員變數需要其他型別時，我們就需要在標頭檔之中引用其他標頭檔。因為 #include 是將引用的檔案展開到 #include 的位置，當引入的數量很多的時候會有大量的 IO 發生。通常標頭檔還會被其他檔案引用，造成倍數的成長。
+<ul>
+<li>如果是方法的參數或是成員變數用到指標或是參考時，編譯器要知道保留多少空間來儲存這個參數。幸運的是指標或是參考的大小都是固定的，因此編譯器並不需要知道整個類別的記憶體佈局。所以使用前置宣告可以減少需要引入的標頭檔數量。</li>
+<li>減少需要引入的標頭檔數量還可以減少因為修改檔案時需要重新編譯的檔案數量。</li>
+</ul>
+</li>
+</ol>
+<h2 id="前置宣告的缺點">前置宣告的缺點</h2>
+<ul>
+<li>根據 <a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a> 並不建議使用前置宣告。</li>
+<li>使用前置宣告可能造成對 incomplete type 的操作，這在 C++ 標準是未定義行為(Undefine Behaviour)，因此無法保證程式是否能更正確運行。
+<ul>
+<li>在 #include 該型別的定義之前絕對不要對該型別做操作。
+<ul>
+<li>大部分的情況部會有問題，而且誤用時也會有編譯錯誤。但是像是 delete 指標、將指標當成參數是可以通過編譯的（會有警告）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Ref: <a href="https://docs.microsoft.com/zh-tw/cpp/cpp/declarations-and-definitions-cpp?view=vs-2019">https://docs.microsoft.com/zh-tw/cpp/cpp/declarations-and-definitions-cpp?view=vs-2019</a></p>
+<ul class="pa0">
+  
+   <li class="list">
+     <a href="/blog/tags/c&#43;&#43;" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">c&#43;&#43;</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="/blog/posts/cpp-naming/">C&#43;&#43; - 命名規則</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://litsungyiaktsk.github.io/blog/" >
+    &copy;  Programmer Cookbook 2020 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/blog/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

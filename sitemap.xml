@@ -3,32 +3,37 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://litsungyiAktsk.github.io/blog/tags/c&#43;&#43;/</loc>
+    <loc>https://litsungyiaktsk.github.io/blog/tags/c&#43;&#43;/</loc>
+    <lastmod>2020-06-29T17:23:06+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://litsungyiaktsk.github.io/blog/posts/cpp-declare-define/</loc>
+    <lastmod>2020-06-29T17:23:06+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://litsungyiaktsk.github.io/blog/posts/</loc>
+    <lastmod>2020-06-29T17:23:06+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://litsungyiaktsk.github.io/blog/</loc>
+    <lastmod>2020-06-29T17:23:06+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://litsungyiaktsk.github.io/blog/tags/</loc>
+    <lastmod>2020-06-29T17:23:06+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://litsungyiaktsk.github.io/blog/posts/cpp-naming/</loc>
     <lastmod>2020-06-29T14:13:50+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://litsungyiAktsk.github.io/blog/posts/cpp-naming/</loc>
-    <lastmod>2020-06-29T14:13:50+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://litsungyiAktsk.github.io/blog/posts/</loc>
-    <lastmod>2020-06-29T14:13:50+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://litsungyiAktsk.github.io/blog/</loc>
-    <lastmod>2020-06-29T14:13:50+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://litsungyiAktsk.github.io/blog/tags/</loc>
-    <lastmod>2020-06-29T14:13:50+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://litsungyiAktsk.github.io/blog/categories/</loc>
+    <loc>https://litsungyiaktsk.github.io/blog/categories/</loc>
   </url>
   
 </urlset>
